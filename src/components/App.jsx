@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import { ContactList } from './contactList';
 import { ContactForm } from './ContactForm';
 import { Filter } from './Filter';
+import './App.css';
 
 
 export class App extends Component {
@@ -15,6 +16,18 @@ export class App extends Component {
     ],
     filter: ''
   };
+  componentDidMount() {
+    const storedContacts = localStorage.getItem('contacts');
+    if (storedContacts) {
+      this.setState({ contacts: JSON.parse(storedContacts) });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   addContact = (name, number) => {
     const { contacts } = this.state;
@@ -63,7 +76,7 @@ export class App extends Component {
     return (
       <div className="App">
         <div className="container">
-        <h1>Phonebook</h1>
+        <h2>Phonebook</h2>
       <ContactForm onAddContact={this.addContact}/>
 
       <h2>Contacts</h2>
